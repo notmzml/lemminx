@@ -4,7 +4,18 @@ on:
     branches: [test]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        gu-binary: [gu, gu.cmd]
+        exclude:
+          - os: ubuntu-latest
+            gu-binary: gu.cmd
+          - os: macos-latest
+            gu-binary: gu.cmd
+          - os: windows-latest
+            gu-binary: gu
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -17,18 +28,10 @@ jobs:
         with:
           graalvm: '21.0.0.2'
           java: 'java11'
-          arch: 'aarch64'
-      - name: Run on aarch64
-        uses: uraimo/run-on-arch-action@v2.0.9
-        id: runcmd
-        with:
-          arch: aarch64
-          distro: ubuntu20.04
-          run: |
-            uname -a
+          arch: 'amd64'
       - name: Build lemminx
         run: |
-          gu install native-image
+          ${{ matrix.gu-binary }}i nstall native-image
           ./mvnw clean package -Dnative -DskipTests -Dgraalvm.static=--static
           ls org.eclipse.lemminx/target
       - name: Upload artifact
