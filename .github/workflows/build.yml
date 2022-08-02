@@ -4,16 +4,7 @@ on:
     branches: [test]
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        gu-binary: [gu.cmd, gu]
-        exclude:
-          - os: ubuntu-latest
-            gu-binary: gu.cmd
-          - os: windows-latest
-            gu-binary: gu
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -21,19 +12,20 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Setup Graalvm(aarch64)
-        uses: DeLaGuardo/setup-graalvm@new-parameters
+      - name: install gu
+        uses: graalvm/setup-graalvm@v1
         with:
-          graalvm: '20.2.0'
-          java: 'java11'
-          arch: 'amd64'
+          version: '20.2.0'
+          java-version: '11'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build lemminx
         run: |
-          ${{ matrix.gu-binary }} install native-image
+          native-image --version
           ./mvnw clean package -Dnative -DskipTests -Dgraalvm.static=--static
           ls org.eclipse.lemminx/target
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: releases
-          path: org.eclipse.lemminx/target/*
+          path: org.eclipse.lemminx/target/org*
