@@ -16,7 +16,7 @@ jobs:
         uses: DeLaGuardo/setup-graalvm@new-parameters
         with:
           graalvm: '21.0.0.2'
-          java: 'java11'
+          java: 'java17'
           arch: 'aarch64'
 
       # Run commands on aarch64
