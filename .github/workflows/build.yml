@@ -19,10 +19,12 @@ jobs:
           java-version: '11'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: install static lib
+        run: |
+          sudo apt install zlib1g-dev
+          native-image --version
       - name: Build lemminx
         run: |
-          sudo apt install glibc-static libstdc++-static zlib-static zlib1g-dev
-          native-image --version
           ./mvnw clean package -Dnative -DskipTests -Dgraalvm.static=--static
           ls org.eclipse.lemminx/target
       - name: Upload artifact
