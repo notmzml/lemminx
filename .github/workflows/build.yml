@@ -7,15 +7,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        gu-binary: [gu, gu.cmd]
+        os: [ubuntu-latest]
+        gu-binary: [gu.cmd]
         exclude:
           - os: ubuntu-latest
             gu-binary: gu.cmd
-          - os: macos-latest
-            gu-binary: gu.cmd
-          - os: windows-latest
-            gu-binary: gu
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -31,7 +27,7 @@ jobs:
           arch: 'amd64'
       - name: Build lemminx
         run: |
-          ${{ matrix.gu-binary }}i nstall native-image
+          ${{ matrix.gu-binary }} install native-image
           ./mvnw clean package -Dnative -DskipTests -Dgraalvm.static=--static
           ls org.eclipse.lemminx/target
       - name: Upload artifact
