@@ -24,7 +24,7 @@ jobs:
       - name: Setup Graalvm(aarch64)
         uses: DeLaGuardo/setup-graalvm@new-parameters
         with:
-          graalvm: '21.0.0.2'
+          graalvm: '20.2.0'
           java: 'java11'
           arch: 'amd64'
       - name: Build lemminx
