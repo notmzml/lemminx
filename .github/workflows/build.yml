@@ -11,25 +11,21 @@ jobs:
       - name: setup jdk
         uses: actions/setup-java@v1
         with:
-          java-version: 17
+          java-version: 11
       - name: Setup Graalvm(aarch64)
         uses: DeLaGuardo/setup-graalvm@new-parameters
         with:
           graalvm: '21.0.0.2'
-          java: 'java17'
+          java: 'java11'
           arch: 'aarch64'
-
-      # Run commands on aarch64
       - name: Run on aarch64
         uses: uraimo/run-on-arch-action@v2.0.9
         id: runcmd
         with:
           arch: aarch64
           distro: ubuntu20.04
-          githubToken: ${{ github.token }}
           run: |
             uname -a
-            echo ::set-output name=uname::$(uname -a)
       - name: Build lemminx
         run: |
           gu install native-image
