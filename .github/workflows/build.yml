@@ -7,11 +7,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        gu-binary: [gu.cmd]
+        os: [ubuntu-latest, windows-latest]
+        gu-binary: [gu.cmd, gu]
         exclude:
           - os: ubuntu-latest
             gu-binary: gu.cmd
+          - os: windows-latest
+            gu-binary: gu
     steps:
       - name: checkout
         uses: actions/checkout@v2
