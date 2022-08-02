@@ -21,6 +21,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build lemminx
         run: |
+          sudo apt install glibc-static libstdc++-static zlib-static zlib1g-dev
           native-image --version
           ./mvnw clean package -Dnative -DskipTests -Dgraalvm.static=--static
           ls org.eclipse.lemminx/target
